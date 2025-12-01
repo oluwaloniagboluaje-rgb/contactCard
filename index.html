@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <style>
+        body {
+            background: black;
+            font-family: "Segoe UI", sans-serif;
+            display: flex;
+            justify-content: center;
+            padding-top: 80px;
+            color: white;
+        }
+
+        .nimi {
+            background: blue;
+            padding: 25px;
+            border-radius: 20px;
+            width: 400px;
+        }
+
+        .content {
+            text-align: center;
+            padding: 20px;
+        }
+
+        #result {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+    <div class="nimi">
+        <div class="header"></div>
+
+
+        <h3 class="text-center mb-3">Contact Card</h3>
+
+        <div class="content">
+
+            <div class="d-flex flex-column align-items-start gap-2 mb-3 ">
+
+                <input class="form-control " type="text" id="prodName" placeholder="👬 contact Name" autofocus>
+
+                <input class="form-control " type="text" id="prodPrice" placeholder="📞 Phone number">
+
+                <input class="form-control " type="text" id="prodDesc" placeholder="✉️ Contact Email">
+
+                <input class="form-control" type="text" id="prodImg" placeholder=" 🎯 contact Address">
+                <input class="form-control" type="text" id="prodImg" placeholder="📷 contact image">
+
+
+                <button onclick="submitProduct()" class="btn btn-success text-center d-flex gap-5 mb-5">Save Contact
+                    ✅</button>
+
+                <button onclick="blockcontact()" class="btn btn-danger text center">block</button>
+
+            </div>
+
+
+            <div id="result" class="ms-3"></div>
+            <div class="control-buttons d-flex flex-wrap gap-2 mb-3">
+
+
+                <script>
+                    let prodArr = []
+
+                    function submitProduct() {
+                        let productName = prodName.value
+                        let productPrice = prodPrice.value
+                        let productDescription = prodDesc.value
+                        let productImage = prodImg.value
+
+                        let prodObj = {
+                            productName,
+                            productPrice,
+                            productDescription,
+                            productImage,
+                            isBlocked: false 
+                        };
+
+                        (
+                            prodName.value == "" ||
+                            prodPrice.value == "" ||
+                            prodDesc.value == "" ||
+                            prodImg.value == "")
+                            ? alert("please input all field")
+                            : prodArr.push(prodObj);
+
+
+                        console.log(prodArr)
+                        prodName.value = "",
+                            prodPrice.value = "",
+                            prodDesc.value = "",
+                            prodImg.value = ""
+
+                        displayProd()
+
+                    }
+
+                    function displayProd() {
+                        result.innerHTML = ""
+                        for (let i = 0; i < prodArr.length; i++) {
+
+                            let statusText = prodArr[i].isBlocked
+                                ? `<span class="badge bg-danger">Blocked ❌</span>`
+                                : `<span class="badge bg-success">Active ✅</span>`;
+
+                            result.innerHTML += `
+                <div class="card" style="width: 18rem;">
+                    <img src="${prodArr[i].productImage}" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">${prodArr[i].productName}</h5>
+                        <p class="card-text">${prodArr[i].productDescription}</p>
+                        <p class="card-text">${prodArr[i].productPrice}</p>
+
+                        <p>Status: ${statusText}</p>
+
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-warning" onclick="toggleBlock(${i})">
+                                ${prodArr[i].isBlocked ? "Unblock" : "Block"}
+                            </button>
+
+                            <button class="btn btn-danger" onclick="deleteItem(${i})">Delete 🗑️</button>
+                            <button class="btn btn-secondary" onclick="editItem(${i})">Edit ✍️</button>
+                        </div>
+                    </div>
+                </div>`;
+                        }
+                    }
+
+                    function toggleBlock(i) {
+                        prodArr[i].isBlocked = !prodArr[i].isBlocked;
+                        displayProd();
+                    }
+
+                    function deleteLastProd(lastProd) {
+                        let deleteLastProd = confirm("delete?")
+                        if (deleteLastProd) {
+                            prodArr.pop()
+                            console.log(prodArr)
+                            displayProd()
+                        }
+                    }
+
+                    function reverseProd(reverse) {
+                        let reverseProd = confirm("do you want to reverse?")
+                        if (reverseProd) {
+                            prodArr.reverse()
+                            console.log(prodArr)
+                            displayProd()
+                        }
+
+
+                    }
+
+                    function unshiftProd(unshift) {
+                        let unshiftProd = confirm("do you want to unshift?")
+                        if (unshiftProd) {
+                            prodArr.unshift(prodName.value)
+                            prodName.value = ""
+                            console.log(prodArr)
+                            displayProd()
+                        }
+                    }
+
+                    function shiftProd(shift) {
+                        let shiftProd = confirm("do you want to shift?");
+                        if (shiftProd) {
+                            prodArr.shift()
+                            console.log(prodArr)
+                            displayProd()
+                        }
+                    }
+
+                    function deleteItem(some) {
+                        let isdelete = confirm("delete?");
+                        if (isdelete) {
+                            console.log(some)
+                            prodArr.splice(some, 1)
+                            displayProd()
+                        }
+                    }
+
+                    function editItem(some) {
+                        let newItem = prompt(
+                            `edit item? name:${prodArr[some].productName}`,
+                            prodArr[some].productName
+                        );
+
+                        let desc = prompt(
+                            `Edit the item description? Desc:${prodArr[some].productDescription}`,
+                            prodArr[some].productDescription
+                        );
+
+                        let price = prompt(
+                            `Edit the item price? Price:${prodArr[some].productPrice}`,
+                            prodArr[some].productPrice
+                        );
+
+                        let image = prompt(
+                            `Edit the item image URL? Image:${prodArr[some].productImage}`,
+                            prodArr[some].productImage
+                        );
+
+
+                        prodArr.splice(some, 1, {
+                            productName: newItem ? newItem : prodArr[some].productName,
+                            productDescription: desc ? desc : prodArr[some].productDescription,
+                            productPrice: price ? price : prodArr[some].productPrice,
+                            productImage: image ? image : prodArr[some].productImage,
+                            isBlocked: prodArr[some].isBlocked
+                        });
+
+                        displayProd();
+                    } 
+                </script>
+
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+                    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+                    crossorigin="anonymous"></script>
+</body>
+
+</html>
