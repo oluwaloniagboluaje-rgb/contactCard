@@ -61,7 +61,6 @@
                 <button onclick="submitProduct()" class="btn btn-success text-center d-flex gap-5 mb-5">Save Contact
                     ✅</button>
 
-                <button onclick="blockcontact()" class="btn btn-danger text center">block</button>
 
             </div>
 
@@ -112,7 +111,7 @@
 
                             let statusText = prodArr[i].isBlocked
                                 ? `<span class="badge bg-danger">Blocked ❌</span>`
-                                : `<span class="badge bg-success">Active ✅</span>`;
+                                : `<span class="badge bg-success">Unblocked ✅</span>`;
 
                             result.innerHTML += `
                 <div class="card" style="width: 18rem;">
